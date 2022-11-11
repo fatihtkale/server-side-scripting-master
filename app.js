@@ -4,14 +4,18 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('cross-fetch/polyfill');
-
+var fs = require('fs')
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var app = express();
+require('dotenv').config()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+var logFile = fs.createWriteStream(process.env.LOG_PATH, {flags: 'a'});
+app.use(logger('combined', {stream: logFile}))
 
 app.use(logger('dev'));
 app.use(express.json());
